@@ -849,7 +849,7 @@ const SITE = {
       projects:[] },
     { name:'MODE', jp:'衣装', color:'#ff5ce1', object:'sketchbook', branch:'Onderdeel: stalen schetsboek',
       blurb:'Kleding, styling en lookbooks, vastgeprikt en geplakt in een stalen schetsboek.',
-      projects:[] },
+      projects:[{title:'Clandestine collectie',type:'Collectie',year:'2020',images:['img/clandestine-1.jpg','img/clandestine-2.jpg','img/clandestine-3.jpg','img/clandestine-4.jpg'],captions:['clandestine 2020','de crew','rood licht','vlinders'],note:'Mijn merk, mijn hoofd in 2020. Veel emo en punk.',notes:['merk: Clandestine','emo / punk','hoodies + sweaters'],description:'Shots van een collectie die ik in 2020 maakte voor mijn merk Clandestine. De collectie was een weerspiegeling van mijn mindset in die tijd, met veel emo- en punkreferenties.'}] },
     { name:'CONTACT', jp:'通信', color:'#4affc4', object:'phone', branch:'Onderdeel: gsm-hotline',
       blurb:'Boekingen, opdrachten en samenwerkingen. De lijn is open.',
       projects:[] }
@@ -1234,8 +1234,8 @@ function skDrawNotes(x,w,h,r,sec,p,i){ skPaper(x,w,h,r,'right'); const accent=['
   skSwatch(x,475,175,110,80,.18+r()*.1,accent,['stripe','dots','plaid'][i%3],r);
   x.fillStyle='rgba(28,28,36,.85)'; x.font='700 30px '+SKF.hand; x.textAlign='left'; x.textBaseline='alphabetic'; x.fillText('de look →',300,778); skArrow(x,440,768,560,735,-20);
   x.fillStyle='#15151a'; x.font='34px '+SKF.mark; x.fillText('nr.'+String(i+1).padStart(2,'0'),46,785); skLoop(x,105,772,72,30,r); skStar(x,560,520,14); }
-function skDrawLook(x,w,h,r,sec,p,i,imgs){ skPaper(x,w,h,r,'left'); const n=Math.min(3,Math.max(2,imgs.length));
-  const lay=n===2?[[235,255,-.09],[385,555,.07]]:[[210,215,-.08],[420,330,.09],[260,600,-.04]];
+function skDrawLook(x,w,h,r,sec,p,i,imgs){ skPaper(x,w,h,r,'left'); const n=Math.min(4,Math.max(2,imgs.length));
+  const lay=n===2?[[235,255,-.09],[385,555,.07]]:n===3?[[210,215,-.08],[420,330,.09],[260,600,-.04]]:[[170,215,-.07],[425,250,.06],[185,545,.05],[430,570,-.05]];
   lay.forEach((L,k)=>{ const cap=(p.captions&&p.captions[k])||(k===0?p.title:'look '+String(i+1).padStart(2,'0')+'.'+k); skPolaroid(x,L[0]+r()*16-8,L[1]+r()*16-8,L[2]+(r()*.06-.03),imgs[k],cap,r); });
   skSticky(x,478,118,128,.12,'#ffe66b',p.year?"'"+String(p.year).slice(-2):'new',r);
   skStar(x,72,725,16); skArrow(x,95,690,160,640,18);
@@ -1621,7 +1621,7 @@ for(let i=0;i<N;i++){
       book.add(mf); book.add(mb); sheets.push({geo,front,back,y0:STK/2-(i+.5)*NT,mf,mb}); }
     const readL=new THREE.PointLight(0xfff1dc,0,1.8,2); readL.position.set(BX,AXY+.6,BZ+.2); g.add(readL);
     bookRig={sec,root:book,fc,sheets,outer,inFront,inBack,BW,BD,X:BX,Y:AXY,Z:BZ,spread:0,target:0,open:false,anim:null,readL,busyUntil:0,
-      imgs:fp.map(p=>(p.images&&p.images.length?p.images:(p.image?[p.image]:[])).slice(0,3).map(src=>{ const im=new Image(); im.crossOrigin='anonymous'; im.src=src; return im; }))};
+      imgs:fp.map(p=>(p.images&&p.images.length?p.images:(p.image?[p.image]:[])).slice(0,4).map(src=>{ const im=new Image(); im.crossOrigin='anonymous'; im.src=src; return im; }))};
     sheets.forEach(sh=>bendSheet(bookRig,sh,0,0)); sketchbooks.push(bookRig);
     bookRig.imgs.forEach((list,i)=>list.forEach(im=>im.addEventListener('load',()=>{ if(bookRig.drawn) bookRig.redrawLook(i); })));
     obj=book; book.userData.parts={}; extra=[];
@@ -2191,7 +2191,7 @@ function rFashion(sec,st){ const ps=sec.projects, p=ps[st.sel]||{}, notes=(p.not
   return mbar(['Bestand','Bewerken','Patroon','Kledingstuk','Stof','Weergave','Venster','Help'])
   +'<div class="g-grid"><div class="tools" aria-hidden="true">'+['arrow','pencil','scissors','needle','tape','hanger','hand','zoom'].map((k,i)=>tool(k,i===1)).join('')+'</div>'
   +'<div class="f-board"><div class="f-bh"><b>Moodboard — '+esc(pTitle(p))+'</b><span>'+esc(pmeta(p))+'</span></div><div class="mood">'
-    +[0,1,2].map(i=>'<figure class="pol" style="--r:'+[-3,2.5,-1.5][i]+'deg"><div class="mfr">'+pMedia(p,sec,'FOTO TOEVOEGEN',i)+'</div><figcaption>'+esc((p.captions&&p.captions[i])||(i?'look '+(st.sel+1)+'.'+i:pTitle(p)))+'</figcaption></figure>').join('')
+    +Array.from({length:Math.max(3,Math.min(4,(p.images||[]).length))},(_,i)=>i).map(i=>'<figure class="pol" style="--r:'+[-3,2.5,-1.5,3][i]+'deg"><div class="mfr">'+pMedia(p,sec,'FOTO TOEVOEGEN',i)+'</div><figcaption>'+esc((p.captions&&p.captions[i])||(i?'look '+(st.sel+1)+'.'+i:pTitle(p)))+'</figcaption></figure>').join('')
     +'<div class="snote" style="--r:2deg">'+pText(p.note||p.description,'[een paar woorden over dit stuk: de stof, het idee, hoe het gemaakt is]')+'</div></div></div>'
   +'<aside class="g-side"><section class="pnl">'+ph('Looks')+'<div class="alist">'+ps.map((q,i)=>'<button type="button" class="ai'+(i===st.sel?' on':'')+'" data-sel="'+i+'"><span class="mfr">'+pMedia(q,sec,' ')+'</span><span><b>'+esc(pTitle(q))+'</b><i>'+esc(pmeta(q))+'</i></span></button>').join('')+'</div></section>'
   +'<section class="pnl">'+ph('Kledingspecificaties')+'<div class="pb">'+fld('Titel',p.title)+fld('Soort',p.type)+fld('Jaar',p.year)+'<div class="fk">Notities</div><ul class="nl">'+notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul>'+lnk(p,'Project openen')+'</div></section>'
@@ -2779,7 +2779,7 @@ const SITE = {
       projects:[] },
     { name:'FASHION', jp:'衣装', color:'#ff5ce1', object:'sketchbook', branch:'Branch: steel sketchbook',
       blurb:'Garments, styling and lookbooks, pinned and taped into a steel sketchbook.',
-      projects:[] },
+      projects:[{title:'Clandestine collection',type:'Collection',year:'2020',images:['img/clandestine-1.jpg','img/clandestine-2.jpg','img/clandestine-3.jpg','img/clandestine-4.jpg'],captions:['clandestine 2020','the crew','red light','butterflies'],note:'My brand, my head in 2020. Lots of emo and punk.',notes:['brand: Clandestine','emo / punk','hoodies + sweaters'],description:'Shots of a collection I made in 2020 for my brand Clandestine. The collection reflected my mindset at the time, with lots of emo and punk references.'}] },
     { name:'CONTACT', jp:'通信', color:'#4affc4', object:'phone', branch:'Branch: brick phone hotline',
       blurb:'Bookings, commissions and collaborations. The line is open.',
       projects:[] }
@@ -3164,8 +3164,8 @@ function skDrawNotes(x,w,h,r,sec,p,i){ skPaper(x,w,h,r,'right'); const accent=['
   skSwatch(x,475,175,110,80,.18+r()*.1,accent,['stripe','dots','plaid'][i%3],r);
   x.fillStyle='rgba(28,28,36,.85)'; x.font='700 30px '+SKF.hand; x.textAlign='left'; x.textBaseline='alphabetic'; x.fillText('the look →',300,778); skArrow(x,440,768,560,735,-20);
   x.fillStyle='#15151a'; x.font='34px '+SKF.mark; x.fillText('no.'+String(i+1).padStart(2,'0'),46,785); skLoop(x,105,772,72,30,r); skStar(x,560,520,14); }
-function skDrawLook(x,w,h,r,sec,p,i,imgs){ skPaper(x,w,h,r,'left'); const n=Math.min(3,Math.max(2,imgs.length));
-  const lay=n===2?[[235,255,-.09],[385,555,.07]]:[[210,215,-.08],[420,330,.09],[260,600,-.04]];
+function skDrawLook(x,w,h,r,sec,p,i,imgs){ skPaper(x,w,h,r,'left'); const n=Math.min(4,Math.max(2,imgs.length));
+  const lay=n===2?[[235,255,-.09],[385,555,.07]]:n===3?[[210,215,-.08],[420,330,.09],[260,600,-.04]]:[[170,215,-.07],[425,250,.06],[185,545,.05],[430,570,-.05]];
   lay.forEach((L,k)=>{ const cap=(p.captions&&p.captions[k])||(k===0?p.title:'look '+String(i+1).padStart(2,'0')+'.'+k); skPolaroid(x,L[0]+r()*16-8,L[1]+r()*16-8,L[2]+(r()*.06-.03),imgs[k],cap,r); });
   skSticky(x,478,118,128,.12,'#ffe66b',p.year?"'"+String(p.year).slice(-2):'new',r);
   skStar(x,72,725,16); skArrow(x,95,690,160,640,18);
@@ -3551,7 +3551,7 @@ for(let i=0;i<N;i++){
       book.add(mf); book.add(mb); sheets.push({geo,front,back,y0:STK/2-(i+.5)*NT,mf,mb}); }
     const readL=new THREE.PointLight(0xfff1dc,0,1.8,2); readL.position.set(BX,AXY+.6,BZ+.2); g.add(readL);
     bookRig={sec,root:book,fc,sheets,outer,inFront,inBack,BW,BD,X:BX,Y:AXY,Z:BZ,spread:0,target:0,open:false,anim:null,readL,busyUntil:0,
-      imgs:fp.map(p=>(p.images&&p.images.length?p.images:(p.image?[p.image]:[])).slice(0,3).map(src=>{ const im=new Image(); im.crossOrigin='anonymous'; im.src=src; return im; }))};
+      imgs:fp.map(p=>(p.images&&p.images.length?p.images:(p.image?[p.image]:[])).slice(0,4).map(src=>{ const im=new Image(); im.crossOrigin='anonymous'; im.src=src; return im; }))};
     sheets.forEach(sh=>bendSheet(bookRig,sh,0,0)); sketchbooks.push(bookRig);
     bookRig.imgs.forEach((list,i)=>list.forEach(im=>im.addEventListener('load',()=>{ if(bookRig.drawn) bookRig.redrawLook(i); })));
     obj=book; book.userData.parts={}; extra=[];
@@ -4121,7 +4121,7 @@ function rFashion(sec,st){ const ps=sec.projects, p=ps[st.sel]||{}, notes=(p.not
   return mbar(['File','Edit','Pattern','Garment','Fabric','View','Window','Help'])
   +'<div class="g-grid"><div class="tools" aria-hidden="true">'+['arrow','pencil','scissors','needle','tape','hanger','hand','zoom'].map((k,i)=>tool(k,i===1)).join('')+'</div>'
   +'<div class="f-board"><div class="f-bh"><b>Moodboard — '+esc(pTitle(p))+'</b><span>'+esc(pmeta(p))+'</span></div><div class="mood">'
-    +[0,1,2].map(i=>'<figure class="pol" style="--r:'+[-3,2.5,-1.5][i]+'deg"><div class="mfr">'+pMedia(p,sec,'ADD PHOTO',i)+'</div><figcaption>'+esc((p.captions&&p.captions[i])||(i?'look '+(st.sel+1)+'.'+i:pTitle(p)))+'</figcaption></figure>').join('')
+    +Array.from({length:Math.max(3,Math.min(4,(p.images||[]).length))},(_,i)=>i).map(i=>'<figure class="pol" style="--r:'+[-3,2.5,-1.5,3][i]+'deg"><div class="mfr">'+pMedia(p,sec,'ADD PHOTO',i)+'</div><figcaption>'+esc((p.captions&&p.captions[i])||(i?'look '+(st.sel+1)+'.'+i:pTitle(p)))+'</figcaption></figure>').join('')
     +'<div class="snote" style="--r:2deg">'+pText(p.note||p.description,'[a few words about this piece: the fabric, the idea, how it was made]')+'</div></div></div>'
   +'<aside class="g-side"><section class="pnl">'+ph('Looks')+'<div class="alist">'+ps.map((q,i)=>'<button type="button" class="ai'+(i===st.sel?' on':'')+'" data-sel="'+i+'"><span class="mfr">'+pMedia(q,sec,' ')+'</span><span><b>'+esc(pTitle(q))+'</b><i>'+esc(pmeta(q))+'</i></span></button>').join('')+'</div></section>'
   +'<section class="pnl">'+ph('Garment specs')+'<div class="pb">'+fld('Title',p.title)+fld('Type',p.type)+fld('Year',p.year)+'<div class="fk">Notes</div><ul class="nl">'+notes.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul>'+lnk(p,'Open project')+'</div></section>'
