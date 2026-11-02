@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Signaal verloren | outerbody</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#07080b">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Share+Tech+Mono&family=DotGothic16&display=swap">
+<style>
+:root{color-scheme:dark;--ink:#c9d0d8;--dim:#6b7380;--acc:#4affc4}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:#050608;color:var(--ink);font-family:"Share Tech Mono",ui-monospace,monospace;display:flex;align-items:center;justify-content:center;padding:24px 16px;overflow:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.8))}
+body::after{content:"";position:fixed;inset:-50%;pointer-events:none;opacity:.08;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain .25s steps(3) infinite}
+@keyframes grain{0%{transform:translate(0,0)}33%{transform:translate(-3%,2%)}66%{transform:translate(2%,-3%)}}
+main{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;max-width:560px}
+.bat{width:min(220px,50vw);filter:drop-shadow(0 0 24px rgba(74,255,196,.25));animation:flick 4s infinite}
+@keyframes flick{0%,100%{opacity:1}46%{opacity:1}47%{opacity:.3;transform:translateX(4px)}48%{opacity:1;transform:none}80%{opacity:.85}}
+.jp{font-family:"DotGothic16",monospace;color:var(--acc);letter-spacing:.3em;font-size:13px;text-shadow:0 0 8px rgba(74,255,196,.6)}
+h1{margin:0;font-family:"Syncopate",sans-serif;font-weight:700;font-size:clamp(28px,7vw,54px);letter-spacing:.18em;padding-left:.18em;background:linear-gradient(180deg,#fff 0%,#cfd5dc 38%,#5b626c 52%,#e9edf1 70%,#8e97a3 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.code{font-size:11px;letter-spacing:.28em;color:var(--dim)}
+p{margin:0;font-size:13px;line-height:1.7;color:var(--ink)}
+p.en{color:var(--dim)}
+a.btn{margin-top:6px;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 20px;color:var(--acc);text-decoration:none;font-size:12px;letter-spacing:.2em;text-transform:uppercase;border:1px solid transparent;border-image:linear-gradient(180deg,#f4f6f8,#7c8592 45%,#2c3139 55%,#cfd5dc) 1;background:linear-gradient(180deg,#22262d,#111318)}
+a.btn:hover,a.btn:focus-visible{background:var(--acc);color:#07080b}
+@media (prefers-reduced-motion:reduce){body::after,.bat{animation:none}}
+</style>
+</head>
+<body>
+<main>
+  <img class="bat" src="/img/favicon-192.png" alt="" width="192" height="192">
+  <span class="jp">信号喪失</span>
+  <h1>SIGNAAL VERLOREN</h1>
+  <span class="code">ERR_404 // SECTOR NIET GEVONDEN</span>
+  <p>Deze pagina bestaat niet (meer). Ga terug naar de console en kies opnieuw.</p>
+  <p class="en" lang="en">Signal lost. This page doesn't exist. Head back to the console.</p>
+  <a class="btn" href="/">← Terug naar outerbody</a>
+</main>
+</body>
+</html>
