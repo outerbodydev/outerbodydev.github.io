@@ -1028,6 +1028,10 @@ bootLines.forEach((l,i)=>setTimeout(()=>{ $('boot').insertAdjacentHTML('beforeen
 
 if(!window.THREE&&window.__threeP){ await window.__threeP; } window.__obStep&&__obStep('build');
 if(!window.THREE){ $('fail').hidden=false; return; }
+/* cel-shading test: ?cel=1 banded light, ?cel=2 banded light + outlines */
+const CEL=+((location.search.match(/[?&]cel=(\d)/)||[])[1]||0);
+if(CEL){ const ch=THREE.ShaderChunk, k='lights_physical_pars_fragment', a='float dotNL = saturate( dot( geometry.normal, directLight.direction ) );';
+  if(ch[k]&&ch[k].includes(a)) ch[k]='float celBand(float x){ float y=x*3.0; return (floor(y)+smoothstep(.4,.6,fract(y)))/3.0; }\n'+ch[k].replace(a,a+' dotNL=celBand(dotNL);'); }
 let renderer;
 const glOK=()=>{ try{ if(/[?&]3d=1/.test(location.search)) return true; const c=document.createElement('canvas'); const gl=window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')); if(!gl) return false;
   let r=''; try{ const ext=gl.getExtension('WEBGL_debug_renderer_info'); r=String(gl.getParameter(ext?ext.UNMASKED_RENDERER_WEBGL:gl.RENDERER)||''); }catch(e){}
@@ -2812,10 +2816,14 @@ function frame(now){
   renderer.render(scene,camera);
 }
 /* warm-up: compile shaders and upload textures one by one, so the first frame is light */
+function addOutlines(root,w){ const list=[]; root.traverse(o=>{ if(!o.isMesh||o.userData.isOutline||!o.geometry||!o.geometry.attributes.normal) return; const m=o.material; if(!m||Array.isArray(m)||m.transparent||m.side===THREE.DoubleSide||!(m.isMeshStandardMaterial||m.isMeshPhongMaterial||m.isMeshLambertMaterial||m.isMeshToonMaterial)) return; const t=o.geometry.type; if(/Plane|Circle|Shape|Ring/.test(t)) return; list.push(o); });
+  const mat=new THREE.MeshBasicMaterial({color:0x050608,side:THREE.BackSide,fog:true}); mat.onBeforeCompile=sh=>{ sh.vertexShader=sh.vertexShader.replace('#include <begin_vertex>','vec3 transformed = vec3( position ) + normalize( normal ) * '+w.toFixed(4)+';'); };
+  list.forEach(o=>{ const e=new THREE.Mesh(o.geometry,mat); e.userData.isOutline=true; e.raycast=()=>{}; e.renderOrder=o.renderOrder; o.add(e); }); return list.length; }
 async function warmUp(sc,cam){ if(NOGL||!renderer.compile) return; const objs=[]; sc.traverse(o=>{ if(o.material) objs.push([o,o.material]); });
   const mats=[...new Set(objs.flatMap(x=>[].concat(x[1])))];
   for(const m of mats){ objs.forEach(([o,om])=>{ o.material=(om===m||(Array.isArray(om)&&om.includes(m)))?om:null; }); try{ renderer.compile(sc,cam); }catch(e){} objs.forEach(([o,om])=>{ o.material=om; }); await Y(); }
   if(renderer.initTexture){ const seen=new Set(); for(const m of mats){ for(const k of ['map','alphaMap','emissiveMap','normalMap','roughnessMap','metalnessMap','bumpMap']){ const t=m[k]; if(t&&t.isTexture&&!seen.has(t)&&!t.isRenderTargetTexture){ seen.add(t); try{ renderer.initTexture(t); }catch(e){} await Y(); } } } } }
+if(CEL>=2&&!NOGL){ addOutlines(scene,LITE?.012:.016); addOutlines(cScene,.02); }
 await warmUp(cScene,camera); await warmUp(lScene,lCam);
 requestAnimationFrame(frame); requestAnimationFrame(()=>requestAnimationFrame(()=>window.__obDone&&__obDone()));
 let reopenWeb=false; try{ reopenWeb=sessionStorage.getItem('ob-reopen')==='web'; sessionStorage.removeItem('ob-reopen'); }catch(e){}
