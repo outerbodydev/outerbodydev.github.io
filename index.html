@@ -676,7 +676,7 @@ html.lite .grain{animation:none;mix-blend-mode:normal;opacity:.05}
   <h2 id="hTitle">CONTACT</h2>
   <p id="hBlurb"></p>
   <div class="h-mail"><span class="h-label">Verzenden naar</span><code id="hMail"></code></div>
-  <div class="h-actions"><a class="h-btn primary" id="hMailto" href="mailto:outerbodycontact@gmail.com">E-mailapp openen ↗</a><button class="h-btn" id="hCopy" type="button">Adres kopiëren</button></div>
+  <div class="h-actions"><a class="h-btn primary" id="hMailto" href="mailto:outerbodycontact@gmail.com">E-mailapp openen ↗</a><a class="h-btn" id="hGmail" href="#" target="_blank" rel="noopener">Gmail ↗</a><button class="h-btn" id="hCopy" type="button">Adres kopiëren</button></div>
   <div class="h-links" id="hLinks"></div>
 </div>
 <div id="webfolio" hidden role="dialog" aria-label="outerbody OS, webversie van het portfolio">
@@ -777,7 +777,7 @@ html.lite .grain{animation:none;mix-blend-mode:normal;opacity:.05}
   <h2 id="hTitle">CONTACT</h2>
   <p id="hBlurb"></p>
   <div class="h-mail"><span class="h-label">Transmit to</span><code id="hMail"></code></div>
-  <div class="h-actions"><a class="h-btn primary" id="hMailto" href="mailto:outerbodycontact@gmail.com">Open email app ↗</a><button class="h-btn" id="hCopy" type="button">Copy address</button></div>
+  <div class="h-actions"><a class="h-btn primary" id="hMailto" href="mailto:outerbodycontact@gmail.com">Open email app ↗</a><a class="h-btn" id="hGmail" href="#" target="_blank" rel="noopener">Gmail ↗</a><button class="h-btn" id="hCopy" type="button">Copy address</button></div>
   <div class="h-links" id="hLinks"></div>
 </div>
 <div id="webfolio" hidden role="dialog" aria-label="outerbody OS, web version of the portfolio">
@@ -2101,7 +2101,7 @@ function wfPageHtml(page){ const sec=wfSec(page);
       +'</div>'; }
   const st=' style="--c:'+sec.color+';--sec:'+sec.color+'"', head='<header><span class="wf-jp">'+esc(sec.jp)+'</span><h2>'+esc(sec.name)+'</h2></header>';
   if(sec.object==='phone'){ const socials=SITE.socials.map(x=>'<a class="btn" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.label)+' ↗</a>').join('');
-    return '<section class="wf-sec"'+st+'>'+head+'<p>'+esc(sec.blurb)+'</p><div class="mail"><code id="wfMail">'+esc(SITE.email)+__t('</code><button class="btn" type="button" id="wfCopy">E-mail kopiëren</button><a class="btn" href="mailto:','</code><button class="btn" type="button" id="wfCopy">Copy email</button><a class="btn" href="mailto:')+esc(SITE.email)+__t('">E-mailapp openen ↗</a></div><div class="links">','">Open email app ↗</a></div><div class="links">')+socials+'</div></section>'; }
+    return '<section class="wf-sec"'+st+'>'+head+'<p>'+esc(sec.blurb)+'</p><div class="mail"><code id="wfMail">'+esc(SITE.email)+__t('</code><button class="btn" type="button" id="wfCopy">E-mail kopiëren</button><a class="btn" href="mailto:','</code><button class="btn" type="button" id="wfCopy">Copy email</button><a class="btn" href="mailto:')+esc(SITE.email)+__t('">E-mailapp openen ↗</a>','">Open email app ↗</a>')+'<a class="btn" href="'+gmailUrl()+'" target="_blank" rel="noopener">Gmail ↗</a></div><div class="links">'+socials+'</div></section>'; }
   if(!sec.projects.length) return '<section class="wf-sec"'+st+'>'+head+'<div class="wf-about"><div class="thumb">'+(sec.image?'<img src="'+esc(sec.image)+__t('" alt="Portret van Ronelo Lamrini">','" alt="Portrait of Ronelo Lamrini">'):'<div class="ph"><span>'+esc(sec.jp.charAt(0))+__t('</span><span>PORTRET TOEVOEGEN</span></div>','</span><span>ADD PORTRAIT</span></div>'))+'</div><div class="wf-text"'+(sec.lang?' lang="'+sec.lang+'"':'')+'>'+sec.blurb.split(/\n\s*\n/).map(t=>'<p>'+esc(t)+'</p>').join('')+'</div></div></section>';
   return '<section class="wf-sec"'+st+'>'+head+'<p>'+esc(sec.blurb.split('. Each project')[0].split(__t('. Beweeg over','. Hover a project'))[0].replace(/\.?$/,'.'))+'</p><div class="wf-grid">'+sec.projects.map(p=>{ const img=p.image||(p.images&&p.images[0]);
     const inner='<div class="thumb">'+(img?'<img src="'+esc(img)+'" alt="'+esc(p.title||'')+'">':'<div class="ph"><span>'+esc(sec.jp.charAt(0))+__t('</span><span>AFBEELDING TOEVOEGEN</span></div>','</span><span>ADD IMAGE</span></div>'))+'</div><span class="t-title">'+esc(p.title||'')+'</span><span class="t-meta">'+esc([p.type,p.year].filter(Boolean).join(' · '))+'</span>';
@@ -2279,7 +2279,7 @@ function rContact(sec,st){ const socials=SITE.socials.map(x=>'<a class="ab" href
   +__t('<form class="c-form" novalidate><div class="c-row"><span class="fk">Aan</span><code data-to>','<form class="c-form" novalidate><div class="c-row"><span class="fk">To</span><code data-to>')+esc(SITE.email)+__t('</code><button type="button" class="ab" data-a="copy">Kopiëren</button></div>','</code><button type="button" class="ab" data-a="copy">Copy</button></div>')
   +__t('<div class="c-row"><label class="fk" for="cSub">Onderwerp</label><input id="cSub" type="text" value="Hallo via je portfolio"></div>','<div class="c-row"><label class="fk" for="cSub">Subject</label><input id="cSub" type="text" value="Hello from your portfolio"></div>')
   +__t('<label class="fk" for="cBody">Bericht</label><textarea id="cBody" placeholder="Schrijf je bericht…">','<label class="fk" for="cBody">Message</label><textarea id="cBody" placeholder="Write your message…">')+esc(st.draft||'')+'</textarea>'
-  +'<div class="c-act"><a class="ab primary" data-send href="mailto:'+esc(SITE.email)+__t('">Versturen ↗</a><span class="hint">Opent je e-mailapp. Gebeurt er niets? Kopieer dan het adres hierboven.</span></div>','">Send ↗</a><span class="hint">Opens your email app. If nothing happens, copy the address above.</span></div>')
+  +'<div class="c-act"><a class="ab primary" data-send href="mailto:'+esc(SITE.email)+__t('">Versturen ↗</a><a class="ab" data-gsend href="#" target="_blank" rel="noopener">Via Gmail ↗</a><span class="hint">Versturen opent je e-mailapp, of kies Gmail. Gebeurt er niets? Kopieer dan het adres hierboven.</span></div>','">Send ↗</a><a class="ab" data-gsend href="#" target="_blank" rel="noopener">Via Gmail ↗</a><span class="hint">Send opens your email app, or choose Gmail. Nothing happening? Copy the address above.</span></div>')
   +'<div class="fk">'+esc(sec.blurb)+'</div><div class="ab-row">'+socials+'</div></form></div>'; }
 
 const PROGS={camera:{app:'obCut Pro',file:'outerbody.obcut',r:rVideo,t:tVideo},crt:{app:'obDraw',file:'artboards.obd',r:rGraphic},disc:{app:'obStream',file:'outerbody',r:rMusic},
@@ -2301,7 +2301,7 @@ function appRender(W){ const {sec,st,prog}=W; st.body=W.body; st.col=sec.color; 
   if(!empty&&sec.object==='camera') vWire(W);
   if(!empty&&sec.object==='podcast'){ wireScrub(W); const vol=W.body.querySelector('[data-vol]'); if(vol) vol.addEventListener('input',()=>{ st.vol=+vol.value; W.body.querySelector('[data-volv]').textContent=st.vol; if(st.audio) st.audio.volume=st.vol/100; }); }
   if(sec.object==='phone'){ const sub=W.body.querySelector('#cSub'), bod=W.body.querySelector('#cBody'), send=W.body.querySelector('[data-send]');
-    const upd=()=>{ st.draft=bod.value; send.href='mailto:'+SITE.email+'?subject='+encodeURIComponent(sub.value)+'&body='+encodeURIComponent(bod.value); }; sub.addEventListener('input',upd); bod.addEventListener('input',upd); upd();
+    const upd=()=>{ st.draft=bod.value; send.href='mailto:'+SITE.email+'?subject='+encodeURIComponent(sub.value)+'&body='+encodeURIComponent(bod.value); const gs=W.body.querySelector('[data-gsend]'); if(gs) gs.href=gmailUrl(sub.value,bod.value); }; sub.addEventListener('input',upd); bod.addEventListener('input',upd); upd();
     W.body.querySelector('form').addEventListener('submit',e=>e.preventDefault()); } }
 function appStop(W,silent){ const st=W.st; clearInterval(st.timer); const vv=W.body&&W.body.querySelector('video'); if(vv&&!vv.paused) vv.pause(); st.timer=null; if(st.audio){ st.audio.pause(); st.audio=null; } if(st.playing){ st.playing=false; if(!silent) appRender(W); } }
 function appAct(W,a,b){ const {sec,st,prog}=W, n=sec.projects.length;
@@ -2375,7 +2375,7 @@ function openCollab(){ wfMenu(false); const key='collab', W=WM.wins[key]; if(W){
   const w=document.createElement('section'); w.className='os-win app-win app-collab'; w.setAttribute('aria-label',__t('Zin om samen iets te maken?','Want to create together?'));
   w.innerHTML='<div class="os-title"><span class="os-tico app-ico">'+picto('STAR')+__t('</span><span class="os-ttxt">samen_maken.txt — obMail</span><div class="os-ctl"><button type="button" data-w="close" class="os-x" aria-label="Venster sluiten">✕</button></div></div>','</span><span class="os-ttxt">create_together.txt — obMail</span><div class="os-ctl"><button type="button" data-w="close" class="os-x" aria-label="Close window">✕</button></div></div>')
     +__t('<div class="app-body"><div class="co"><span class="co-k">ZIN OM SAMEN IETS TE MAKEN?</span><p>Heb je een idee, een opdracht of een track die beelden nodig heeft? Stuur het op.</p><code class="co-mail" data-to>','<div class="app-body"><div class="co"><span class="co-k">WANT TO CREATE TOGETHER?</span><p>Got an idea, a brief or a track that needs visuals? Send it over.</p><code class="co-mail" data-to>')+esc(SITE.email)+'</code>'
-    +'<div class="ab-row"><a class="ab primary" href="mailto:'+esc(SITE.email)+'?subject='+encodeURIComponent(__t('Laten we samen iets maken',"Let's create together"))+__t('">E-mailapp openen ↗</a><button type="button" class="ab" data-a="copy">Adres kopiëren</button></div>','">Open email app ↗</a><button type="button" class="ab" data-a="copy">Copy address</button></div>')
+    +'<div class="ab-row"><a class="ab primary" href="mailto:'+esc(SITE.email)+'?subject='+encodeURIComponent(__t('Laten we samen iets maken',"Let's create together"))+__t('">E-mailapp openen ↗</a>','">Open email app ↗</a>')+'<a class="ab" href="'+gmailUrl(__t('Laten we samen iets maken',"Let's create together"))+'" target="_blank" rel="noopener">Gmail ↗</a>'+__t('<button type="button" class="ab" data-a="copy">Adres kopiëren</button></div>','<button type="button" class="ab" data-a="copy">Copy address</button></div>')
     +__t('<span class="hint">Opent je e-mailapp niet? Kopieer dan het adres hierboven.</span></div></div>','<span class="hint">If your email app doesn\'t open, copy the address above.</span></div></div>');
   $('osDesk').appendChild(w); const dw=$('osDesk').clientWidth, dh=$('osDesk').clientHeight, ww=Math.min(520,dw-24), hh=Math.min(330,dh-24);
   w.style.width=ww+'px'; w.style.height=hh+'px'; w.style.left=Math.round((dw-ww)/2)+'px'; w.style.top=Math.round((dh-hh)/2)+'px';
@@ -2625,7 +2625,7 @@ function pickUp(s){ SND.pickup(); s.held=true; const ph=s.obj; camera.attach(ph)
   tween(950,e=>{ ph.position.lerpVectors(p0,p1,e); ph.position.y+=Math.sin(e*Math.PI)*.1; ph.quaternion.copy(q0).slerp(q1,e); },()=>{ if(focused===s) showHolo(); });
 }
 let holoTimer=null;
-function showHolo(){ const h=$('holo'); $('hMail').textContent=SITE.email; $('hMailto').href='mailto:'+SITE.email; $('hBlurb').textContent=SITE.sections.find(x=>x.object==='phone').blurb;
+function showHolo(){ const h=$('holo'); $('hMail').textContent=SITE.email; $('hMailto').href='mailto:'+SITE.email; $('hGmail').href=gmailUrl(); $('hBlurb').textContent=SITE.sections.find(x=>x.object==='phone').blurb;
   $('hLinks').innerHTML=SITE.socials.map(x=>'<a class="h-btn" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.label)+' ↗</a>').join('');
   h.hidden=false; h.inert=false; requestAnimationFrame(()=>h.classList.add('on')); $('hCopy').textContent=__t('Adres kopiëren','Copy address');
   const t0=Date.now(); clearInterval(holoTimer); holoTimer=setInterval(()=>{ const sec=(Date.now()-t0)/1000|0; $('hTime').textContent=String(sec/60|0).padStart(2,'0')+':'+String(sec%60).padStart(2,'0'); },500);
@@ -2651,6 +2651,7 @@ function closeSector(){
   moveCam(V(0,EYE,0),dirOf(yaw,0).add(V(0,EYE,0)),1100,()=>{ mode='room'; $('hudBot').classList.remove('hide'); $('openBtn').focus({preventScroll:true}); });
 }
 
+function gmailUrl(su,body){ return 'https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(SITE.email)+(su?'&su='+encodeURIComponent(su):'')+(body?'&body='+encodeURIComponent(body):''); }
 function sm(src){ return src&&/^img\/[^/]+\.webp$/.test(src)&&!/-sm\.webp$/.test(src)?src.replace(/\.webp$/,'-sm.webp'):src; }
 function esc(t){ return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function goRel(rel){ const t=sectors.find(x=>x.sec&&x.sec.object===rel.obj); if(!t) return; SND.select(); closeSector();
