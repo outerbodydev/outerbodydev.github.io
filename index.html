@@ -1724,7 +1724,7 @@ for(let i=0;i<N;i++){ await Y();
     M(new THREE.BoxGeometry(.06,.016,.012),lip,0,-.095,.118,head);
     M(new THREE.BoxGeometry(.05,.008,.01),hairM,0,-.078,.124,head);
     M(new THREE.BoxGeometry(.03,.05,.02),hairM,0,-.142,.098,head);
-    const cap=M(new THREE.SphereGeometry(.124,9,6,0,Math.PI*2,0,Math.PI*.52),hairM,0,.035,-.012,head); cap.scale.set(.9,1,.98);
+    const cap=M(new THREE.SphereGeometry(.132,14,8,0,Math.PI*2,0,Math.PI*.55),hairM,0,.028,-.018,head); cap.scale.set(.9,1.08,.99); cap.rotation.x=-.5;
     // ponytail: locs gathered at the crown, swept back, fanning out
     const tie=new THREE.Group(); tie.position.set(0,.09,-.1); tie.rotation.x=-1.5; head.add(tie);
     M(new THREE.CylinderGeometry(.04,.05,.06,8),hairM,0,0,0,tie); M(new THREE.TorusGeometry(.043,.009,4,10),copper,0,.012,0,tie).rotation.x=Math.PI/2;
